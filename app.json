@@ -3,11 +3,13 @@
     "name": "Yolnu",
     "slug": "Yolnu",
     "version": "1.0.0",
+    "scheme": "yolnu",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.anonymous.Yolnu"
     },
     "android": {
       "adaptiveIcon": {
@@ -15,7 +17,8 @@
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
+      },
+      "package": "com.anonymous.Yolnu"
     },
     "web": {
       "favicon": "./assets/favicon.png"
