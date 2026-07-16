@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,7 +18,7 @@ export function MainTabs() {
   const insets = useSafeAreaInsets();
 
   return (
-    <>
+    <View style={styles.root}>
       <Tab.Navigator
         initialRouteName={TabRoutes.ApplyRenew}
         screenOptions={{
@@ -77,6 +78,15 @@ export function MainTabs() {
         />
       </Tab.Navigator>
       <DemoControls />
-    </>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+});
+

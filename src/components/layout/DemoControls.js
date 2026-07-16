@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 import { useDemo } from '../../context/DemoContext';
@@ -8,18 +8,53 @@ import { colors, radius, spacing, typography } from '../../theme/tokens';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 
-export function DemoControls() {
-  const [visible, setVisible] = useState(false);
-  const { tabBarOffset } = useResponsive();
+function DemoSheet({ onClose }) {
   const {
     profileComplete,
     setProfileComplete,
-    applicationStatus,
-    setApplicationStatus,
     showInvalidFileError,
     setShowInvalidFileError,
+    setApplicationStatus,
     resetDemo,
   } = useDemo();
+
+  return (
+    <Pressable style={styles.backdrop} onPress={onClose}>
+      <Pressable style={styles.sheet} onPress={() => {}}>
+        <ScrollView bounces={false} keyboardShouldPersistTaps="handled">
+          <Card>
+            <Text style={styles.title}>Demo controls</Text>
+            <Text style={styles.subtitle}>Quickly switch between happy path and edge-case states.</Text>
+            <View style={styles.group}>
+              <Button
+                title={profileComplete ? 'Profile complete' : 'Profile incomplete'}
+                variant="secondary"
+                onPress={() => setProfileComplete(!profileComplete)}
+              />
+              <Button
+                title={showInvalidFileError ? 'Hide invalid file state' : 'Show invalid file state'}
+                variant="secondary"
+                onPress={() => setShowInvalidFileError(!showInvalidFileError)}
+              />
+            </View>
+            <View style={styles.group}>
+              <Button title="No application" variant="outline" onPress={() => setApplicationStatus('none')} />
+              <Button title="Pending review" variant="outline" onPress={() => setApplicationStatus('pending')} />
+              <Button title="Approved" variant="outline" onPress={() => setApplicationStatus('approved')} />
+              <Button title="Rejected" variant="outline" onPress={() => setApplicationStatus('rejected')} />
+            </View>
+            <Button title="Reset demo" variant="secondary" onPress={resetDemo} />
+          </Card>
+        </ScrollView>
+      </Pressable>
+    </Pressable>
+  );
+}
+
+export function DemoControls() {
+  const [visible, setVisible] = useState(false);
+  const { tabBarOffset } = useResponsive();
+  const close = () => setVisible(false);
 
   return (
     <>
@@ -27,35 +62,17 @@ export function DemoControls() {
         <Feather name="sliders" size={18} color={colors.text} />
         <Text style={styles.fabLabel}>Demo</Text>
       </Pressable>
-      <Modal visible={visible} animationType="slide" transparent onRequestClose={() => setVisible(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setVisible(false)}>
-          <Pressable style={styles.sheet} onPress={() => {}}>
-            <Card>
-              <Text style={styles.title}>Demo controls</Text>
-              <Text style={styles.subtitle}>Quickly switch between happy path and edge-case states.</Text>
-              <View style={styles.group}>
-                <Button
-                  title={profileComplete ? 'Profile complete' : 'Profile incomplete'}
-                  variant="secondary"
-                  onPress={() => setProfileComplete(!profileComplete)}
-                />
-                <Button
-                  title={showInvalidFileError ? 'Hide invalid file state' : 'Show invalid file state'}
-                  variant="secondary"
-                  onPress={() => setShowInvalidFileError(!showInvalidFileError)}
-                />
-              </View>
-              <View style={styles.group}>
-                <Button title="No application" variant="outline" onPress={() => setApplicationStatus('none')} />
-                <Button title="Pending review" variant="outline" onPress={() => setApplicationStatus('pending')} />
-                <Button title="Approved" variant="outline" onPress={() => setApplicationStatus('approved')} />
-                <Button title="Rejected" variant="outline" onPress={() => setApplicationStatus('rejected')} />
-              </View>
-              <Button title="Reset demo" variant="secondary" onPress={resetDemo} />
-            </Card>
-          </Pressable>
-        </Pressable>
-      </Modal>
+      {Platform.OS === 'web' ? (
+        visible ? (
+          <View style={styles.webOverlay} pointerEvents="box-none">
+            <DemoSheet onClose={close} />
+          </View>
+        ) : null
+      ) : (
+        <Modal visible={visible} animationType="slide" transparent onRequestClose={close}>
+          <DemoSheet onClose={close} />
+        </Modal>
+      )}
     </>
   );
 }
@@ -77,12 +94,17 @@ const styles = StyleSheet.create({
     color: colors.text,
     ...typography.bodyStrong,
   },
+  webOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 100,
+  },
   backdrop: {
     flex: 1,
     backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
   sheet: {
+    maxHeight: '85%',
     padding: spacing.md,
   },
   title: {
