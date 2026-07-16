@@ -14,6 +14,6 @@ export function useResponsive() {
     horizontalPadding: isCompact ? 16 : 20,
     contentGap: isCompact ? 12 : 16,
     sectionGap: isCompact ? 16 : 20,
-    tabBarOffset: 72 + insets.bottom,
+    tabBarOffset: 84 + insets.bottom,
   };
 }

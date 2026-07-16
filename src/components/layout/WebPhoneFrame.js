@@ -153,6 +153,8 @@ const styles = StyleSheet.create({
   },
   screen: {
     flex: 1,
+    width: '100%',
+    position: 'relative',
     backgroundColor: colors.background,
     overflow: 'hidden',
   },
