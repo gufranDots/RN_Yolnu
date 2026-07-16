@@ -27,7 +27,7 @@ export function ProfileScreen() {
             : 'Complete the highlighted profile details to unlock the application flow.'
         }
       />
-      <ProfileForm onChangePassword={() => navigation.navigate(MainRoutes.ChangePassword)} />
+      <ProfileForm />
       <Button title="Change Password" variant="outline" onPress={() => navigation.navigate(MainRoutes.ChangePassword)} />
       <Button title="Logout" variant="outline" onPress={logout} />
     </Screen>
