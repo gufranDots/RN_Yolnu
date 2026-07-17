@@ -1,21 +1,22 @@
 import React, { useCallback } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as Linking from 'expo-linking';
+import { useNavigation } from '@react-navigation/native';
 
+import { AuthRoutes } from '../../navigation/routes';
 import { useResponsive } from '../../theme/responsive';
 import { colors, radius, shadows, spacing, typography } from '../../theme/tokens';
 
 export function OnboardingPage({ page, width, height }) {
+  const navigation = useNavigation();
   const { horizontalPadding, isCompact } = useResponsive();
 
-  const openExternalLink = useCallback(async (url) => {
-    try {
-      await Linking.openURL(url);
-    } catch {
-      Alert.alert('Unable to open link', 'Please try again when you have an internet connection.');
-    }
-  }, []);
+  const openExternalLink = useCallback(
+    (url, title) => {
+      navigation.navigate(AuthRoutes.WebContent, { url, title });
+    },
+    [navigation]
+  );
 
   return (
     <ScrollView
@@ -59,7 +60,7 @@ export function OnboardingPage({ page, width, height }) {
             <Pressable
               accessibilityRole="link"
               key={action.url}
-              onPress={() => openExternalLink(action.url)}
+              onPress={() => openExternalLink(action.url, action.label)}
               style={({ pressed }) => [styles.action, pressed && styles.pressed]}
             >
               <Text style={styles.actionText}>{action.label}</Text>
@@ -71,7 +72,7 @@ export function OnboardingPage({ page, width, height }) {
 
       <Pressable
         accessibilityRole="link"
-        onPress={() => openExternalLink(page.sourceUrl)}
+        onPress={() => openExternalLink(page.sourceUrl, page.title)}
         style={({ pressed }) => [styles.sourceLink, pressed && styles.pressed]}
       >
         <Text style={styles.sourceText}>Read this section on the website</Text>
@@ -87,7 +88,7 @@ export function OnboardingPage({ page, width, height }) {
             {section.url ? (
               <Pressable
                 accessibilityRole="link"
-                onPress={() => openExternalLink(section.url)}
+                onPress={() => openExternalLink(section.url, section.title)}
                 style={({ pressed }) => [styles.inlineLink, pressed && styles.pressed]}
               >
                 <Text style={styles.inlineLinkText}>{section.linkLabel}</Text>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { DemoControls } from '../components/layout/DemoControls';
 import { ApplyRenewScreen } from '../screens/main/ApplyRenewScreen';
 import { MessagesScreen } from '../screens/main/MessagesScreen';
 import { ProfileScreen } from '../screens/main/ProfileScreen';
@@ -21,10 +20,9 @@ export function MainTabs() {
   const bottomPad = Platform.OS === 'web' ? 14 : Math.max(insets.bottom, spacing.xs);
 
   return (
-    <View style={styles.root}>
-      <Tab.Navigator
-        initialRouteName={TabRoutes.ApplyRenew}
-        screenOptions={{
+    <Tab.Navigator
+      initialRouteName={TabRoutes.ApplyRenew}
+      screenOptions={{
           headerShown: false,
           tabBarShowLabel: true,
           // Desktop web reports a wide window; without this, labels sit beside icons and clip in the phone frame.
@@ -55,8 +53,8 @@ export function MainTabs() {
             paddingTop: 4,
             paddingBottom: 2,
           },
-        }}
-      >
+      }}
+    >
         <Tab.Screen
           name={TabRoutes.ApplyRenew}
           component={ApplyRenewScreen}
@@ -93,16 +91,7 @@ export function MainTabs() {
             tabBarIcon: ({ color, size }) => <Feather name="user" color={color} size={size} />,
           }}
         />
-      </Tab.Navigator>
-      <DemoControls />
-    </View>
+    </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    position: 'relative',
-  },
-});
 

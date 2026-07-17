@@ -7,6 +7,7 @@ import { ResetPasswordScreen } from '../screens/auth/ResetPasswordScreen';
 import { SignUpScreen } from '../screens/auth/SignUpScreen';
 import { VerifyEmailScreen } from '../screens/auth/VerifyEmailScreen';
 import { OnboardingScreen } from '../screens/onboarding/OnboardingScreen';
+import { WebContentScreen } from '../screens/web/WebContentScreen';
 import { useDemo } from '../context/DemoContext';
 import { AuthRoutes } from './routes';
 
@@ -23,6 +24,7 @@ export function AuthNavigator() {
       screenOptions={{ headerShown: false, animation: 'fade_from_bottom' }}
     >
       <Stack.Screen name={AuthRoutes.Onboarding} component={OnboardingScreen} />
+      <Stack.Screen name={AuthRoutes.WebContent} component={WebContentScreen} />
       <Stack.Screen name={AuthRoutes.Login} component={LoginScreen} />
       <Stack.Screen name={AuthRoutes.SignUp} component={SignUpScreen} />
       <Stack.Screen name={AuthRoutes.VerifyEmail} component={VerifyEmailScreen} />
