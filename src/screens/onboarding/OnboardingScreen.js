@@ -1,8 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, InteractionManager, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { OnboardingPage } from '../../components/onboarding/OnboardingPage';
 import { Button } from '../../components/ui/Button';
@@ -14,12 +14,30 @@ import { colors, spacing, typography } from '../../theme/tokens';
 export function OnboardingScreen() {
   const navigation = useNavigation();
   const listRef = useRef(null);
+  const currentIndexRef = useRef(0);
   const { completeOnboarding } = useDemo();
   const [pageWidth, setPageWidth] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinishing, setIsFinishing] = useState(false);
   const isLastPage = currentIndex === onboardingPages.length - 1;
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!pageWidth) {
+        return undefined;
+      }
+
+      const task = InteractionManager.runAfterInteractions(() => {
+        listRef.current?.scrollToOffset({
+          offset: currentIndexRef.current * pageWidth,
+          animated: false,
+        });
+      });
+
+      return () => task.cancel();
+    }, [pageWidth])
+  );
 
   const finishOnboarding = useCallback(async () => {
     if (isFinishing) {
@@ -41,6 +59,7 @@ export function OnboardingScreen() {
         offset: nextIndex * pageWidth,
         animated: true,
       });
+      currentIndexRef.current = nextIndex;
       setCurrentIndex(nextIndex);
     },
     [pageWidth]
@@ -59,6 +78,7 @@ export function OnboardingScreen() {
       return;
     }
     const nextIndex = Math.round(event.nativeEvent.contentOffset.x / pageWidth);
+    currentIndexRef.current = nextIndex;
     setCurrentIndex(nextIndex);
   };
 
