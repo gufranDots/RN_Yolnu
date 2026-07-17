@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { colors, radius, shadows, spacing } from '../../theme/tokens';
 
-export function Card({ children, style }) {
+export function Card({ children, style = undefined }) {
   return <View style={[styles.card, style]}>{children}</View>;
 }
 

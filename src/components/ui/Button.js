@@ -5,16 +5,16 @@ import { colors, radius, spacing, typography } from '../../theme/tokens';
 
 export function Button({
   title,
-  subtitle,
+  subtitle = undefined,
   variant = 'primary',
   onPress,
-  disabled,
-  icon,
+  disabled = false,
+  icon = undefined,
   iconPosition = 'left',
-  style,
+  style = undefined,
   compact = false,
   centered = false,
-  titleNumberOfLines,
+  titleNumberOfLines = undefined,
 }) {
   return (
     <Pressable

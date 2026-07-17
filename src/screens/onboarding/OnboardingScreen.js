@@ -2,20 +2,18 @@ import React, { useCallback, useRef, useState } from 'react';
 import { FlatList, InteractionManager, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { OnboardingPage } from '../../components/onboarding/OnboardingPage';
 import { Button } from '../../components/ui/Button';
-import { useDemo } from '../../context/DemoContext';
+import { useAuth } from '../../context/AuthContext';
 import { onboardingPages } from '../../data/onboarding';
-import { AuthRoutes } from '../../navigation/routes';
 import { colors, spacing, typography } from '../../theme/tokens';
 
 export function OnboardingScreen() {
-  const navigation = useNavigation();
   const listRef = useRef(null);
   const currentIndexRef = useRef(0);
-  const { completeOnboarding } = useDemo();
+  const { completeOnboarding } = useAuth();
   const [pageWidth, setPageWidth] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -46,11 +44,7 @@ export function OnboardingScreen() {
 
     setIsFinishing(true);
     await completeOnboarding();
-    navigation.reset({
-      index: 0,
-      routes: [{ name: AuthRoutes.Login }],
-    });
-  }, [completeOnboarding, isFinishing, navigation]);
+  }, [completeOnboarding, isFinishing]);
 
   const goToPage = useCallback(
     (index) => {
@@ -158,7 +152,7 @@ export function OnboardingScreen() {
             compact
             centered
             disabled={isFinishing}
-            title={isLastPage ? 'Continue to Login' : 'Next'}
+            title={isLastPage ? 'Get Started' : 'Next'}
             titleNumberOfLines={1}
             onPress={handleNext}
             iconPosition="right"

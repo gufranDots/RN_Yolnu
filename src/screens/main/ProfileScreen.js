@@ -5,12 +5,14 @@ import { ProfileForm } from '../../components/profile/ProfileForm';
 import { Button } from '../../components/ui/Button';
 import { Screen } from '../../components/ui/Screen';
 import { StatusBanner } from '../../components/ui/StatusBanner';
+import { useAuth } from '../../context/AuthContext';
 import { useDemo } from '../../context/DemoContext';
 import { MainRoutes } from '../../navigation/routes';
 
 export function ProfileScreen() {
   const navigation = useNavigation();
-  const { profileComplete, logout } = useDemo();
+  const { logout } = useAuth();
+  const { profileComplete } = useDemo();
 
   return (
     <Screen

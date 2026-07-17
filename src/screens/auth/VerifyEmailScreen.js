@@ -5,18 +5,21 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { Input } from '../../components/ui/Input';
 import { Screen } from '../../components/ui/Screen';
-import { useDemo } from '../../context/DemoContext';
+import { useAuth } from '../../context/AuthContext';
 import { colors, spacing, typography } from '../../theme/tokens';
 
 export function VerifyEmailScreen() {
-  const { login } = useDemo();
+  const { login } = useAuth();
   const [otp, setOtp] = useState('123456');
 
   return (
     <Screen title="Verify email" showBack subtitle="Enter the one-time code to confirm your account.">
       <Card>
         <Input label="OTP code" value={otp} onChangeText={setOtp} keyboardType="number-pad" maxLength={6} />
-        <Button title="Verify and continue" onPress={login} />
+        <Button
+          title="Verify and continue"
+          onPress={() => login('verified@example.com', 'verified')}
+        />
         <View style={styles.row}>
           <Text style={styles.text}>Didn't receive it?</Text>
           <Text style={styles.link}>Resend code</Text>

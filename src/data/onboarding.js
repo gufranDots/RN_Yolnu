@@ -1,6 +1,6 @@
 export const ONBOARDING_VERSION = '2026-07';
 
-export const onboardingPages = [
+const allOnboardingPages = [
   {
     id: 'home',
     eyebrow: 'WORKING WITH YOLŊU CARD',
@@ -196,3 +196,5 @@ export const onboardingPages = [
     sourceUrl: 'https://www.workingwithyolngu.com.au/news',
   },
 ];
+
+export const onboardingPages = allOnboardingPages.slice(0, 3);

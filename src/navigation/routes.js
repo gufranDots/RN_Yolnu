@@ -22,3 +22,13 @@ export const MainRoutes = {
   SubmitApplication: 'SubmitApplication',
   ApplicationStatus: 'ApplicationStatus',
 };
+
+export const GuestRoutes = {
+  Home: 'GuestHome',
+  CulturalCompetencyDetail: 'CulturalCompetencyDetail',
+  EastArnhemDetail: 'EastArnhemDetail',
+  CommunityMap: 'CommunityMap',
+  NewsDetail: 'NewsDetail',
+  TrainingDetail: 'TrainingDetail',
+  WebContent: 'GuestWebContent',
+};

@@ -10,14 +10,14 @@ import { colors } from '../../theme/tokens';
 export function Screen({
   children,
   scroll = true,
-  title,
+  title = undefined,
   showBack = false,
-  onBack,
-  subtitle,
-  brand,
-  headerRight,
-  contentStyle,
-  safeStyle,
+  onBack = undefined,
+  subtitle = undefined,
+  brand = undefined,
+  headerRight = undefined,
+  contentStyle = undefined,
+  safeStyle = undefined,
   tabScreen = false,
 }) {
   const { horizontalPadding, contentGap, tabBarOffset } = useResponsive();
@@ -26,7 +26,13 @@ export function Screen({
   return (
     <SafeAreaView style={[styles.safe, safeStyle]} edges={['left', 'right']}>
       {title ? (
-        <AppHeader title={title} showBack={showBack} onBack={onBack} right={headerRight} />
+        <AppHeader
+          title={title}
+          showBack={showBack}
+          onBack={onBack}
+          right={headerRight}
+          showProfile={tabScreen}
+        />
       ) : null}
       <KeyboardAvoidingView
         style={styles.flex}

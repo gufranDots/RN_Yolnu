@@ -3,7 +3,14 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { colors, radius, spacing, typography } from '../../theme/tokens';
 
-export function Input({ label, helperText, multiline, style, inputStyle, ...props }) {
+export function Input({
+  label = undefined,
+  helperText = undefined,
+  multiline = false,
+  style = undefined,
+  inputStyle = undefined,
+  ...props
+}) {
   return (
     <View style={[styles.wrapper, style]}>
       {label ? <Text style={styles.label}>{label}</Text> : null}

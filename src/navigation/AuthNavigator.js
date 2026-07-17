@@ -8,18 +8,18 @@ import { SignUpScreen } from '../screens/auth/SignUpScreen';
 import { VerifyEmailScreen } from '../screens/auth/VerifyEmailScreen';
 import { OnboardingScreen } from '../screens/onboarding/OnboardingScreen';
 import { WebContentScreen } from '../screens/web/WebContentScreen';
-import { useDemo } from '../context/DemoContext';
+import { useAuth } from '../context/AuthContext';
 import { AuthRoutes } from './routes';
 
 const Stack = createNativeStackNavigator();
 
 export function AuthNavigator() {
-  const { hasCompletedOnboarding } = useDemo();
+  const { hasSeenOnboarding } = useAuth();
 
   return (
     <Stack.Navigator
       initialRouteName={
-        hasCompletedOnboarding ? AuthRoutes.Login : AuthRoutes.Onboarding
+        hasSeenOnboarding ? AuthRoutes.Login : AuthRoutes.Onboarding
       }
       screenOptions={{ headerShown: false, animation: 'fade_from_bottom' }}
     >
