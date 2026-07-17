@@ -10,9 +10,11 @@ export function Button({
   onPress,
   disabled,
   icon,
+  iconPosition = 'left',
   style,
   compact = false,
   centered = false,
+  titleNumberOfLines,
 }) {
   return (
     <Pressable
@@ -29,9 +31,10 @@ export function Button({
       ]}
     >
       <View style={[styles.row, centered && styles.rowCentered]}>
-        {icon ? <View style={styles.icon}>{icon}</View> : null}
+        {icon && iconPosition === 'left' ? <View style={styles.icon}>{icon}</View> : null}
         <View style={[styles.content, centered && styles.contentCentered]}>
           <Text
+            numberOfLines={titleNumberOfLines}
             style={[
               styles.title,
               centered && styles.titleCentered,
@@ -46,6 +49,7 @@ export function Button({
             </Text>
           ) : null}
         </View>
+        {icon && iconPosition === 'right' ? <View style={styles.icon}>{icon}</View> : null}
       </View>
     </Pressable>
   );
@@ -74,7 +78,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   contentCentered: {
-    flex: 0,
+    flexGrow: 0,
+    flexShrink: 0,
+    flexBasis: 'auto',
     alignItems: 'center',
   },
   titleCentered: {

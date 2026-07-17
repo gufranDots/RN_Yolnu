@@ -1,4 +1,5 @@
 export const AuthRoutes = {
+  Onboarding: 'Onboarding',
   Login: 'Login',
   SignUp: 'SignUp',
   VerifyEmail: 'VerifyEmail',

@@ -41,6 +41,19 @@ export function LoginScreen() {
           <Text style={styles.signUpLink}>Sign up</Text>
         </Pressable>
       </View>
+      <View style={styles.journeyWrap}>
+        {/* <Button
+          title="App Journey"
+          variant="outline"
+          compact
+          centered
+          titleNumberOfLines={1}
+          onPress={() => navigation.navigate(AuthRoutes.Onboarding)}
+          style={styles.journeyButton}
+        /> */}
+
+<Button title="App Journey" variant="outline" style={styles.journeyButton}  compact centered onPress={() => navigation.navigate(AuthRoutes.Onboarding)} />
+      </View>
     </Screen>
   );
 }
@@ -63,6 +76,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexWrap: 'wrap',
     marginTop: spacing.sm,
+  },
+  journeyWrap: {
+    alignItems: 'center',
+  },
+  journeyButton: {
+    width: "75%",
+    paddingHorizontal: spacing.xl,
   },
   signUpText: {
     color: colors.textMuted,

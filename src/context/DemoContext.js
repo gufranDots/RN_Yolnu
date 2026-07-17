@@ -1,8 +1,11 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { cardLevels, mockUser } from '../data/mock';
+import { ONBOARDING_VERSION } from '../data/onboarding';
 
 const DemoContext = createContext(null);
+const ONBOARDING_STORAGE_KEY = '@yolnu/onboarding-version';
 
 const initialApplication = {
   type: 'New application',
@@ -13,11 +16,47 @@ const initialApplication = {
 
 export function DemoProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
+  const [isAppReady, setIsAppReady] = useState(false);
   const [profileComplete, setProfileComplete] = useState(true);
   const [applicationStatus, setApplicationStatus] = useState('approved');
   const [showInvalidFileError, setShowInvalidFileError] = useState(false);
   const [profile, setProfile] = useState(mockUser);
   const [applicationDraft, setApplicationDraft] = useState(initialApplication);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function hydrateOnboarding() {
+      try {
+        const storedVersion = await AsyncStorage.getItem(ONBOARDING_STORAGE_KEY);
+        if (isMounted) {
+          setHasCompletedOnboarding(storedVersion === ONBOARDING_VERSION);
+        }
+      } catch (error) {
+        console.warn('Unable to read onboarding status.', error);
+      } finally {
+        if (isMounted) {
+          setIsAppReady(true);
+        }
+      }
+    }
+
+    hydrateOnboarding();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const completeOnboarding = useCallback(async () => {
+    setHasCompletedOnboarding(true);
+    try {
+      await AsyncStorage.setItem(ONBOARDING_STORAGE_KEY, ONBOARDING_VERSION);
+    } catch (error) {
+      console.warn('Unable to save onboarding status.', error);
+    }
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -25,6 +64,9 @@ export function DemoProvider({ children }) {
       setIsLoggedIn,
       login: () => setIsLoggedIn(true),
       logout: () => setIsLoggedIn(false),
+      hasCompletedOnboarding,
+      completeOnboarding,
+      isAppReady,
       profileComplete,
       setProfileComplete,
       applicationStatus,
@@ -46,7 +88,17 @@ export function DemoProvider({ children }) {
       },
       submitApplication: () => setApplicationStatus('pending'),
     }),
-    [applicationDraft, applicationStatus, isLoggedIn, profile, profileComplete, showInvalidFileError]
+    [
+      applicationDraft,
+      applicationStatus,
+      completeOnboarding,
+      hasCompletedOnboarding,
+      isAppReady,
+      isLoggedIn,
+      profile,
+      profileComplete,
+      showInvalidFileError,
+    ]
   );
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;
