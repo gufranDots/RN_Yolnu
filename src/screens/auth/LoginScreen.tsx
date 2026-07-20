@@ -66,7 +66,7 @@ export function LoginScreen() {
       onPress={continueAsGuest}
       style={({ pressed }) => [styles.skipButton, pressed && styles.pressed]}
     >
-      <Text style={styles.skipText}>Skip</Text>
+      <Text style={styles.skipText}>Guest Login</Text>
     </Pressable>
   );
 

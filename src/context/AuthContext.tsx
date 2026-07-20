@@ -8,6 +8,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
+import { Platform } from 'react-native';
 
 export type AuthState = 'guest' | 'member' | 'unauthenticated';
 
@@ -27,6 +28,7 @@ const ONBOARDING_KEY = 'hasSeenOnboarding';
 const AUTH_STATE_KEY = '@yolnu/auth-state';
 const SESSION_TOKEN_KEY = '@yolnu/session-token';
 const DEMO_TOKEN = 'demo-member-session';
+const isWeb = Platform.OS === 'web';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -40,6 +42,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     async function hydrate() {
       try {
+        // Web reloads should always start from onboarding.
+        if (isWeb) {
+          await AsyncStorage.multiRemove([
+            ONBOARDING_KEY,
+            AUTH_STATE_KEY,
+            SESSION_TOKEN_KEY,
+          ]);
+          if (!active) return;
+          setHasSeenOnboarding(false);
+          setAuthState('unauthenticated');
+          return;
+        }
+
         const [onboardingValue, storedState, token] = await Promise.all([
           AsyncStorage.getItem(ONBOARDING_KEY),
           AsyncStorage.getItem(AUTH_STATE_KEY),
